@@ -3,9 +3,14 @@ import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import  {createSprint}  from '@/actions/sprints';
+import { addDays } from 'date-fns';
 
 const SprintCreationForm = ({projectId, projectTitle, projectKey, sprints}: {projectId: string, projectTitle: string, projectKey: string, sprints: number   }) => {
     const [showForm, setShowForm] = useState(false);
+    const [dateRange, setDateRange] = useState({
+        from: new Date(),
+        to: addDays(new Date(), 14),
+    })
     const form = useForm({
         resolver: zodResolver(createSprint),
         defaultValues: {

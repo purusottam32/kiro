@@ -9,9 +9,14 @@ export const projectSchema = z.object({
 
 
 export const sprintSchema = z.object({
-    name: z.string().min(1,"Sprint name is required").max(100,"Sprint name must be less than 100 characters"),
+    name: z.string().min(1,"Sprint name is required"),
     startDate: z.date(),
     endDate: z.date(),
-    
-    goal: z.string().max(500,"Sprint goal must be less than 500 characters").optional(),
+});
+
+export const issueSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  assigneeId: z.string().cuid("Please select assignee"),
+  description: z.string().optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
 });

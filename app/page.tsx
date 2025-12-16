@@ -68,7 +68,7 @@ export default function Home() {
       
       {/* key features section */}
 
-      <section id="features" className="bg-gray-900 py-20 px-5">
+      <section id="features" className="bg-gray-900 py-20 px-5 container mx-auto">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold mb-12 text-center">Key Features</h3>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -88,7 +88,7 @@ export default function Home() {
       </section>
 
       {/* companies carousel */}
-      <section className="py-20">
+      <section className="py-20 container mx-auto">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold mb-12 text-center">Trusted by Industry Leaders</h3>
             <CompanyCarousel/>
@@ -96,7 +96,7 @@ export default function Home() {
       </section>
 
       {/* faqs section */}
-      <section className="bg-gray-900 py-20 px-5">
+      <section className="bg-gray-900 py-20 px-5 container mx-auto">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h3>
           <Accordion type="single" collapsible className="w-full ">

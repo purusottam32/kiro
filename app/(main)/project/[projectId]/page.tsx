@@ -2,7 +2,7 @@ import { getProject } from '@/actions/projects';
 import { notFound } from 'next/navigation';
 import React from 'react'
 import SprintCreationForm from '../_components/create-sprint';
-
+import SprintBoard from '../_components/sprint-board';
 interface Props {
   params: { orgId?: string,projectId: string };
 }

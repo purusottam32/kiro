@@ -23,6 +23,7 @@ import { BarLoader } from 'react-spinners';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import MDEditor from "@uiw/react-md-editor";
+import { toast } from 'sonner';
 
 type IssueCreationDrawerProps = {
     isOpen: boolean;
@@ -35,7 +36,7 @@ type IssueCreationDrawerProps = {
 };
 
 
-const issueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClose, sprintId, status, projectId, onIssueCreated, orgId }) => {
+const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClose, sprintId, status, projectId, onIssueCreated, orgId }) => {
     const {
         loading: createIssueLoading,
         fn: createIssueFn,
@@ -48,13 +49,21 @@ const issueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClo
         fn: fetchUsers,
         data: users,
     } = useFetch(getOrganizationUsers);
+
+    
     useEffect(() => {
-        fetchUsers(orgId);
+        if (isOpen && orgId) {
+            fetchUsers(orgId);
+        }
     }, [isOpen, orgId]);
     const onSubmit = async (data: any) => {
-
+        await createIssueFn(projectId, {
+            ...data,
+            status,
+            sprintId,
+        });
     }
-    const { control, register, handleSubmit, formState: { errors } } = useForm({
+    const { control, register, handleSubmit, formState: { errors },reset } = useForm({
         resolver: zodResolver(issueSchema),
         defaultValues: {
             priority: "MEDIUM",
@@ -62,6 +71,16 @@ const issueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClo
             assigneeId: "",
         },
     })
+
+    useEffect(() => {
+        if (newIssue) {
+            reset();
+            onClose();
+            onIssueCreated();
+            toast.success("Issue added successfully");
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newIssue, createIssueLoading]);
     return (
         <Drawer open={isOpen} onClose={onClose}>
             <DrawerContent>
@@ -69,7 +88,7 @@ const issueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClo
                     <DrawerTitle>Create New Issue</DrawerTitle>
                 </DrawerHeader>
                 {usersLoading && <BarLoader width="100%" color="#368d7b7" />}
-                <form className='p-4 space-y-4'>
+                <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4">
                     <div>
                         <label htmlFor="title" className='block text-sm font-medium mb-1'>Title</label>
                         <Input id="title"{...register("title")} />
@@ -108,13 +127,13 @@ const issueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClo
                             </p>
                         )}
                     </div>
-                                
+
                     <div>
                         <label
                             htmlFor="description"
                             className="block text-sm font-medium mb-1"
                         >
-                        Description
+                            Description
                         </label>
                         <Controller
                             name="description"
@@ -124,10 +143,47 @@ const issueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({ isOpen, onClo
                             )}
                         />
                     </div>
+                    <div>
+                        <label
+                            htmlFor="priority"
+                            className="block text-sm font-medium mb-1"
+                        >
+                            Priority
+                        </label>
+                        <Controller
+                            name="priority"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select priority" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="LOW">Low</SelectItem>
+                                        <SelectItem value="MEDIUM">Medium</SelectItem>
+                                        <SelectItem value="HIGH">High</SelectItem>
+                                        <SelectItem value="URGENT">Urgent</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                    </div>
+
+                    {error && <p className="text-red-500 mt-2">{error.message}</p>}
+                    <Button
+                        type="submit"
+                        disabled={createIssueLoading}
+                        className="w-full"
+                    >
+                        {createIssueLoading ? "Creating..." : "Create Issue"}
+                    </Button>
                 </form>
             </DrawerContent>
         </Drawer>
     )
 }
 
-export default issueCreationDrawer
+export default IssueCreationDrawer

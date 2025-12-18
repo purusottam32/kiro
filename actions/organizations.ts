@@ -87,3 +87,39 @@ export async function getUserIssues(userId : string) {
 
   return issues;
 }
+
+
+export async function getOrganizationUsers(orgId: string) {
+  const { userId } =await auth();
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const clerk = await clerkClient();
+
+  const organizationMemberships =
+    await clerk.organizations.getOrganizationMembershipList({
+      organizationId: orgId,
+    });
+
+  const userIds = organizationMemberships.data.map(
+    (membership: any) => membership.publicUserData.userId
+  );
+
+  const users = await db.user.findMany({
+    where: {
+      clerkUserId: {
+        in: userIds,
+      },
+    },
+  });
+
+  return users;
+}

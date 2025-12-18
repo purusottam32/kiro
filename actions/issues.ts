@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { IssueStatus, IssuePriority } from "@/lib/generated/prisma/enums";

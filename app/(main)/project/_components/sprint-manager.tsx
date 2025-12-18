@@ -58,6 +58,7 @@ export default function SprintManager({
   const {
     fn: updateStatus,
     loading,
+    error,
     data: updatedStatus,
   } = useFetch(updateSprintStatus);
 
@@ -81,7 +82,7 @@ export default function SprintManager({
   /* ---------------- EFFECTS ---------------- */
 
   useEffect(() => {
-    if (updatedStatus?.success) {
+    if (updatedStatus && updatedStatus.success) {
       setStatus(updatedStatus.sprint.status);
 
       setSprint({
@@ -89,7 +90,7 @@ export default function SprintManager({
         status: updatedStatus.sprint.status,
       });
     }
-  }, [updatedStatus]);
+  }, [updatedStatus,loading]);
 
   useEffect(() => {
     const sprintId = searchParams.get("sprint");
@@ -126,7 +127,7 @@ export default function SprintManager({
 
     setSprint(selectedSprint);
     setStatus(selectedSprint.status);
-    router.replace(`/project/${projectId}`, { scroll: false });
+    router.replace(`/project/${projectId}`, undefined);
   };
 
   /* ---------------- UI ---------------- */
@@ -138,13 +139,11 @@ export default function SprintManager({
           <SelectTrigger className="bg-slate-950 self-start">
             <SelectValue placeholder="Select Sprint" />
           </SelectTrigger>
-
           <SelectContent>
-            {sprints.map((s) => (
-              <SelectItem key={s.id} value={s.id}>
-                {s.name} (
-                {format(new Date(s.startDate), "MMM d, yyyy")} to{" "}
-                {format(new Date(s.endDate), "MMM d, yyyy")})
+            {sprints.map((sprint) => (
+              <SelectItem key={sprint.id} value={sprint.id}>
+                {sprint.name} ({format(sprint.startDate, "MMM d, yyyy")} to{" "}
+                {format(sprint.endDate, "MMM d, yyyy")})
               </SelectItem>
             ))}
           </SelectContent>
@@ -159,7 +158,6 @@ export default function SprintManager({
             Start Sprint
           </Button>
         )}
-
         {canEnd && (
           <Button
             onClick={() => handleStatusChange("COMPLETED")}
@@ -170,17 +168,9 @@ export default function SprintManager({
           </Button>
         )}
       </div>
-
-      {loading && (
-        <BarLoader
-          width={"100%"}
-          className="mt-2"
-          color="#36d7b7"
-        />
-      )}
-
+      {loading && <BarLoader width={"100%"} className="mt-2" color="#36d7b7" />}
       {getStatusText() && (
-        <Badge className="mt-3 ml-1 self-start">
+        <Badge variant="destructive" className="mt-3 ml-1 self-start">
           {getStatusText()}
         </Badge>
       )}

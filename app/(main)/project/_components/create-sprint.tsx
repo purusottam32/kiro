@@ -65,17 +65,24 @@ const SprintCreationForm = ({
   /* ---------------- SUBMIT ---------------- */
 
   const onSubmit = async (data: SprintFormData) => {
-    if (!dateRange.from || !dateRange.to) return;
+    if (!dateRange.from || !dateRange.to){
+      toast.error("Please select a valid date range");
+      return;   
+    }
 
-    await createSprintFn(projectId, {
-      name: data.name,                // ✅ string
-      startDate: dateRange.from,      // ✅ Date
-      endDate: dateRange.to,          // ✅ Date
+   try{
+     await createSprintFn(projectId, {
+      name: data.name,                
+      startDate: dateRange.from,      
+      endDate: dateRange.to,          
     });
 
-    setShowForm(false);
     toast.success("Sprint created successfully");
+    setShowForm(false);
     router.refresh();
+   }catch(error: any){
+    toast.error(error.message || "Failed to create sprint");
+   }
   };
 
   /* ---------------- UI ---------------- */

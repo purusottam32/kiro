@@ -11,13 +11,8 @@ export async function createProject(data: {
   const clerk = await clerkClient();
   const { userId, orgId } = await auth();
 
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
-  if (!orgId) {
-    throw new Error("No organization selected");
-  }
+  if (!userId) throw new Error("Unauthorized");
+  if (!orgId) throw new Error("No organization selected");
 
   const { data: membership } =
     await clerk.organizations.getOrganizationMembershipList({
@@ -28,13 +23,24 @@ export async function createProject(data: {
     (member) => member.publicUserData?.userId === userId
   );
 
-  // ✅ CORRECT ROLE
   if (!userMembership || userMembership.role !== "org:admin") {
     throw new Error("Only organization admins can create projects");
   }
 
+  // ✅ prevent duplicate key
+  const existingProject = await db.project.findFirst({
+    where: {
+      key: data.key,
+      organizationId: orgId,
+    },
+  });
+
+  if (existingProject) {
+    throw new Error("Project key already exists");
+  }
+
   try {
-    const project = await db.project.create({
+    return await db.project.create({
       data: {
         name: data.name,
         key: data.key,
@@ -42,11 +48,9 @@ export async function createProject(data: {
         description: data.description ?? "",
       },
     });
-
-    // ✅ THIS LINE FIXES EVERYTHING
-    return project;
-  } catch (error) {
-    throw new Error("Error creating project");
+  } catch (error: any) {
+    console.error("Create project error:", error);
+    throw new Error(error.message || "Failed to create project");
   }
 }
 
@@ -76,7 +80,7 @@ export async function getProject(projectId : string) {
     },
   });
 
-  if (!project) {
+  if (!project) { 
     throw new Error("Project not found");
   }
 

@@ -1,4 +1,5 @@
-"use server"; // optional, indicates server component
+"use server";
+
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { getOrganization } from "@/actions/organizations";
@@ -6,16 +7,10 @@ import OrgSwitcher from "@/components/org-switcher";
 import ProjectList from "./_components/project-list";
 import UserIssues from "./_components/user-issues";
 
-interface Props {
-  params: { orgId?: string };
-}
-
-export default async function OrganizationPage({ params }: Props) {
-  const orgId = params?.orgId;
-
-  if (!orgId) {
-    return <div>Invalid organization</div>;
-  }
+export default async function OrganizationPage(
+  { params }: { params: Promise<{ orgId: string }> }
+) {
+  const { orgId } = await params;
 
   const { userId } = await auth();
 
@@ -37,9 +32,11 @@ export default async function OrganizationPage({ params }: Props) {
         </h1>
         <OrgSwitcher />
       </div>
+
       <div className="mb-4">
         <ProjectList orgId={organization.id} />
       </div>
+
       <div className="mt-8">
         <UserIssues userId={userId} />
       </div>

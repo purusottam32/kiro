@@ -6,7 +6,7 @@ import { useOrganization } from "@clerk/nextjs";
 import useFetch from "@/hooks/use-fetch";
 import { deleteProject } from "@/actions/projects";
 import { useRouter } from "next/navigation";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 type DeleteProjectResponse = {
@@ -23,7 +23,7 @@ const DeleteProject = ({ projectId }: { projectId: string }) => {
     error,
     fn: deleteProjectFn,
     data: deleted,
-  } = useFetch<DeleteProjectResponse>(deleteProject);
+  } = useFetch<DeleteProjectResponse | null>(deleteProject,null);
   
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;

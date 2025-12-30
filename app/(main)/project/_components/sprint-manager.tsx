@@ -60,7 +60,7 @@ export default function SprintManager({
     loading,
     error,
     data: updatedStatus,
-  } = useFetch(updateSprintStatus);
+  } = useFetch(updateSprintStatus,null);
 
   const startDate = new Date(sprint.startDate);
   const endDate = new Date(sprint.endDate);

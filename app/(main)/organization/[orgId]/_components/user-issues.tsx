@@ -1,36 +1,60 @@
 import { Suspense } from "react";
 import { getUserIssues } from "@/actions/organizations";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import IssueCard from "@/components/issue-card";
+import IssueCard from "@/components/issue-card";
+import type { Prisma } from "@/lib/generated/prisma/client";
 
-export default async function UserIssues({ userId }) {
-  const issues = await getUserIssues(userId);
+/* ---------------- TYPES ---------------- */
 
-  if (issues.length === 0) {
-    return null;
-  }
+type UserIssuesProps = {
+  userId: string;
+};
+
+type IssueWithRelations = Prisma.IssueGetPayload<{
+  include: {
+    assignee: true;
+    reporter: true;
+    project: true;
+  };
+}>;
+
+type IssueGridProps = {
+  issues: IssueWithRelations[];
+};
+
+/* ---------------- COMPONENT ---------------- */
+
+export default async function UserIssues({ userId }: UserIssuesProps) {
+  const issues: IssueWithRelations[] = await getUserIssues(userId);
+
+  if (!issues.length) return null;
 
   const assignedIssues = issues.filter(
-    (issue) => issue.assignee.clerkUserId === userId
+    (issue) => issue.assignee?.id === userId
   );
+
   const reportedIssues = issues.filter(
-    (issue) => issue.reporter.clerkUserId === userId
+    (issue) => issue.reporter.id === userId
   );
 
   return (
     <>
-      <h1 className="text-4xl font-bold gradient-title mb-4">My Issues</h1>
+      <h1 className="text-4xl font-bold gradient-title mb-4">
+        My Issues
+      </h1>
 
       <Tabs defaultValue="assigned" className="w-full">
         <TabsList>
           <TabsTrigger value="assigned">Assigned to You</TabsTrigger>
           <TabsTrigger value="reported">Reported by You</TabsTrigger>
         </TabsList>
+
         <TabsContent value="assigned">
           <Suspense fallback={<div>Loading...</div>}>
             <IssueGrid issues={assignedIssues} />
           </Suspense>
         </TabsContent>
+
         <TabsContent value="reported">
           <Suspense fallback={<div>Loading...</div>}>
             <IssueGrid issues={reportedIssues} />
@@ -41,7 +65,9 @@ export default async function UserIssues({ userId }) {
   );
 }
 
-function IssueGrid({ issues }) {
+/* ---------------- GRID ---------------- */
+
+function IssueGrid({ issues }: IssueGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {issues.map((issue) => (

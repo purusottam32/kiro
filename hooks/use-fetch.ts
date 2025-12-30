@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-const useFetch = <T,>(cb: (...args: any[]) => Promise<T>) => {
-  const [data, setData] = useState<T | null>(null);
+const useFetch = <T,>(
+  cb: (...args: any[]) => Promise<T>,
+  initialData: T
+) => {
+  const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 

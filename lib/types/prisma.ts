@@ -13,8 +13,6 @@ export type IssueWithRelations = Prisma.IssueGetPayload<{
   include: {
     assignee: true;
     reporter: true;
-    project: true;
-    sprint: true;
   };
 }>;
 

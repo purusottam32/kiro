@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-const useFetch = <T,>(
-  cb: (...args: any[]) => Promise<T>,
+const useFetch = <T, A extends any[]>(
+  cb: (...args: A) => Promise<T>,
   initialData: T
 ) => {
   const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const fn = async (...args: any[]): Promise<T> => {
+  const fn = async (...args: A): Promise<T> => {
     setLoading(true);
     setError(null);
 
@@ -20,7 +20,6 @@ const useFetch = <T,>(
     } catch (err: unknown) {
       const error =
         err instanceof Error ? err : new Error("Something went wrong");
-
       setError(error);
       toast.error(error.message);
       throw error;

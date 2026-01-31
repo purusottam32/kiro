@@ -24,3 +24,11 @@ export type UserMinimal = Prisma.UserGetPayload<{
     imageUrl: true;
   };
 }>;
+export type IssueFull = Prisma.IssueGetPayload<{
+  include: {
+    assignee: true;
+    reporter: true;
+    project: true;
+    sprint: true;
+  };
+}>;

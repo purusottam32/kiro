@@ -13,22 +13,21 @@ import { formatDistanceToNow } from "date-fns";
 import UserAvatar from "./user-avatar";
 import { useRouter } from "next/navigation";
 import type { Prisma } from "@/lib/generated/prisma/client";
+import IssueDetailsDialog from "./issue-details-dialog";
+import type { IssueWithRelations } from "@/lib/types/prisma";
+
 
 /* ---------------- TYPES ---------------- */
 
 type Priority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 
-type IssueWithRelations = Prisma.IssueGetPayload<{
-  include: {
-    assignee: true;
-  };
-}>;
+
 
 type IssueCardProps = {
   issue: IssueWithRelations;
   showStatus?: boolean;
-  onDelete?: (...args: any[]) => void;
-  onUpdate?: (...args: any[]) => void;
+  onDelete?: () => void;
+  onUpdate?: (issue: IssueWithRelations) => void;
 };
 
 /* ---------------- UI ---------------- */
@@ -49,11 +48,22 @@ export default function IssueCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
 
+  const onDeleteHandler = () => {
+    router.refresh();
+    onDelete?.();
+  };
+
+  const onUpdateHandler = (updated: IssueWithRelations) => {
+    router.refresh();
+    onUpdate?.(updated);
+  };
+
   const created = formatDistanceToNow(new Date(issue.createdAt), {
     addSuffix: true,
   });
 
   return (
+    <>
     <Card
       className="cursor-pointer hover:shadow-md transition-shadow"
       onClick={() => setIsDialogOpen(true)}
@@ -78,5 +88,16 @@ export default function IssueCard({
         </div>
       </CardFooter>
     </Card>
+
+    {isDialogOpen && <IssueDetailsDialog
+      isOpen={isDialogOpen}
+      onClose={()=>setIsDialogOpen(false)}
+      issue={issue}
+      onDelete={onDeleteHandler}
+      onUpdate={onUpdateHandler}
+      borderCol={priorityColor[issue.priority]}
+    />}
+    </>
+
   );
 }

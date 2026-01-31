@@ -23,7 +23,7 @@ import { getIssuesForSprint, updateIssueOrder } from "@/actions/issues";
 import SprintManager from "./sprint-manager";
 import IssueCreationDrawer from "./create-issue";
 import IssueCard from "@/components/issue-card";
-import BoardFilters from "./board-filters";
+// import BoardFilters from "./board-filters";
 
 /* ---------------- TYPES ---------------- */
 
@@ -58,9 +58,18 @@ export default function SprintBoard({
   projectId,
   orgId,
 }: SprintBoardProps) {
-  const [currentSprint, setCurrentSprint] = useState<Sprint>(
-    sprints.find((s) => s.status === "ACTIVE") ?? sprints[0]
-  );
+  /* -------- CURRENT SPRINT (SAFE) -------- */
+
+  const [currentSprint, setCurrentSprint] = useState<Sprint | null>(null);
+
+  useEffect(() => {
+    if (!sprints || sprints.length === 0) return;
+
+    const active =
+      sprints.find((s) => s.status === "ACTIVE") ?? sprints[0];
+
+    setCurrentSprint(active);
+  }, [sprints]);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] =
@@ -83,17 +92,11 @@ export default function SprintBoard({
     if (!currentSprint?.id) return;
     fetchIssues(currentSprint.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSprint.id]);
+  }, [currentSprint?.id]);
 
   useEffect(() => {
-    setFilteredIssues(issues); 
+    setFilteredIssues(issues);
   }, [issues]);
-
-  /* -------- FILTER HANDLER -------- */
-
-  const handleFilterChange = (newFiltered: IssueWithRelations[]) => {
-    setFilteredIssues(newFiltered);
-  };
 
   /* -------- CREATE ISSUE -------- */
 
@@ -103,6 +106,7 @@ export default function SprintBoard({
   };
 
   const handleIssueCreated = () => {
+    if (!currentSprint?.id) return;
     fetchIssues(currentSprint.id);
   };
 
@@ -114,62 +118,64 @@ export default function SprintBoard({
     error: updateIssuesError,
   } = useFetch(updateIssueOrder, { success: false });
 
- const onDragEnd = async (result: DropResult) => {
-  if (!result.destination) return;
+  const onDragEnd = async (result: DropResult) => {
+    if (!result.destination || !currentSprint) return;
 
-  if (currentSprint.status === "PLANNED") {
-    toast.warning("Start the sprint to update board");
-    return;
-  }
+    if (currentSprint.status === "PLANNED") {
+      toast.warning("Start the sprint to update board");
+      return;
+    }
 
-  if (currentSprint.status === "COMPLETED") {
-    toast.warning("Cannot update board after sprint end");
-    return;
-  }
+    if (currentSprint.status === "COMPLETED") {
+      toast.warning("Cannot update board after sprint end");
+      return;
+    }
 
-  const { source, destination } = result;
+    const { source, destination } = result;
 
-  if (
-    destination.droppableId === source.droppableId &&
-    destination.index === source.index
-  ) {
-    return;
-  }
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
 
-  const newOrderedData = [...issues];
+    const newOrderedData = [...issues];
 
-  const sourceList = newOrderedData.filter(
-    (i) => i.status === source.droppableId
-  );
-  const destinationList = newOrderedData.filter(
-    (i) => i.status === destination.droppableId
-  );
-
-  if (source.droppableId === destination.droppableId) {
-    const reordered = reorder(
-      sourceList,
-      source.index,
-      destination.index
+    const sourceList = newOrderedData.filter(
+      (i) => i.status === source.droppableId
     );
-    reordered.forEach((card, i) => (card.order = i));
-  } else {
-    const [moved] = sourceList.splice(source.index, 1);
-    moved.status = destination.droppableId as IssueStatus;
-    destinationList.splice(destination.index, 0, moved);
+    const destinationList = newOrderedData.filter(
+      (i) => i.status === destination.droppableId
+    );
 
-    sourceList.forEach((card, i) => (card.order = i));
-    destinationList.forEach((card, i) => (card.order = i));
+    if (source.droppableId === destination.droppableId) {
+      const reordered = reorder(
+        sourceList,
+        source.index,
+        destination.index
+      );
+      reordered.forEach((card, i) => (card.order = i));
+    } else {
+      const [moved] = sourceList.splice(source.index, 1);
+      moved.status = destination.droppableId as IssueStatus;
+      destinationList.splice(destination.index, 0, moved);
+
+      sourceList.forEach((card, i) => (card.order = i));
+      destinationList.forEach((card, i) => (card.order = i));
+    }
+
+    const sorted = newOrderedData.sort(
+      (a, b) => a.order - b.order
+    );
+
+    setIssues(sorted);
+    updateIssueOrderFn(sorted);
+  };
+
+  if (!currentSprint) {
+    return <div className="p-4">Loading sprint...</div>;
   }
-
-  const sorted = newOrderedData.sort(
-    (a, b) => a.order - b.order
-  );
-
-  setIssues(sorted);    
-
-  updateIssueOrder(sorted);
-};
-
 
   if (issuesError) {
     return <div>Error loading issues</div>;
@@ -185,13 +191,6 @@ export default function SprintBoard({
         sprints={sprints}
         projectId={projectId}
       />
-
-      {/* {!issuesLoading && (
-        <BoardFilters
-          issues={issues}
-          onFilterChange={handleFilterChange}
-        />
-      )} */}
 
       {updateIssuesError && (
         <p className="text-red-500 mt-2">
@@ -234,9 +233,10 @@ export default function SprintBoard({
                           >
                             <IssueCard
                               issue={issue}
-                              onDelete={() =>
-                                fetchIssues(currentSprint.id)
-                              }
+                              onDelete={() => {
+                                if (!currentSprint?.id) return;
+                                fetchIssues(currentSprint.id);
+                              }}
                               onUpdate={(updated) =>
                                 setIssues((prev) =>
                                   prev.map((i) =>

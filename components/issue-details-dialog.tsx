@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -124,6 +125,11 @@ export default function IssueDetailsDialog({
 
     onUpdate?.(updated);
   }, [updated, issue.id, onUpdate]);
+// Sync local status/priority with prop changes (e.g. when issue is updated from elsewhere)(It was optional but added for safety, to avoid stale state if issue prop changes without unmounting the dialog)
+  useEffect(() => {
+    setStatus(issue.status);
+    setPriority(issue.priority);
+  }, [issue.status, issue.priority]);
   /* -------- PERMISSIONS -------- */
 
   const canChange =
@@ -157,6 +163,9 @@ export default function IssueDetailsDialog({
             )}
           </div>
         </DialogHeader>
+         <DialogDescription>
+            View and update issue details
+         </DialogDescription>
 
         {(updateLoading || deleteLoading) && (
           <BarLoader width="100%" color="#36d7b7" />

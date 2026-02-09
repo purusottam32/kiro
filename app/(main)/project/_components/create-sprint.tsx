@@ -105,8 +105,8 @@ const SprintCreationForm = ({
       {showForm && (
         <Card className="pt-4 mb-4">
           <CardContent>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
+            <div
+              
               className="flex gap-4 items-end"
             >
               {/* Sprint Name */}
@@ -173,10 +173,10 @@ const SprintCreationForm = ({
               </div>
 
               {/* Submit */}
-              <Button type="submit" disabled={createSprintLoading}>
+              <Button type="button" disabled={createSprintLoading} onClick={handleSubmit(onSubmit)}>
                 {createSprintLoading ? "Creating..." : "Create Sprint"}
               </Button>
-            </form>
+            </div>
           </CardContent>
         </Card>
       )}

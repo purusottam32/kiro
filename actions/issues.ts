@@ -93,6 +93,30 @@ export async function createIssue(
   return issue;
 }
 
+// export async function updateIssueOrder(
+//   updatedIssues: UpdatedIssueOrder[]
+// ) {
+//   const { userId, orgId } = await auth();
+
+//   if (!userId || !orgId) {
+//     throw new Error("Unauthorized");
+//   }
+
+//   await db.$transaction(async (prisma) => {
+//     for (const issue of updatedIssues) {
+//       await prisma.issue.update({
+//         where: { id: issue.id },
+//         data: {
+//           status: issue.status,
+//           order: issue.order,
+//         },
+//       });
+//     }
+//   });
+
+//   return { success: true };
+// }
+
 export async function updateIssueOrder(
   updatedIssues: UpdatedIssueOrder[]
 ) {
@@ -102,20 +126,21 @@ export async function updateIssueOrder(
     throw new Error("Unauthorized");
   }
 
-  await db.$transaction(async (prisma) => {
-    for (const issue of updatedIssues) {
-      await prisma.issue.update({
+  await Promise.all(
+    updatedIssues.map((issue) =>
+      db.issue.update({
         where: { id: issue.id },
         data: {
           status: issue.status,
           order: issue.order,
         },
-      });
-    }
-  });
+      })
+    )
+  );
 
   return { success: true };
 }
+
 
 export async function deleteIssue(issueId: string) {
   const { userId, orgId } = await auth();

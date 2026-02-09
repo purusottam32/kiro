@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
+  DrawerDescription,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
@@ -27,6 +29,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { toast } from "sonner";
 import type { Prisma } from "@/lib/generated/prisma/client";
 import { z } from "zod";
+import { IssueStatus } from "@/lib/generated/prisma/enums";
 
 /* ---------------- TYPES ---------------- */
 
@@ -34,7 +37,7 @@ type IssueCreationDrawerProps = {
   isOpen: boolean;
   onClose: () => void;
   sprintId?: string | null;
-  status: string;
+  status: IssueStatus;
   projectId: string;
   onIssueCreated: () => void;
   orgId: string;
@@ -67,11 +70,22 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
     data: users,
   } = useFetch<OrgUser[]>(getOrganizationUsers);
 
-  useEffect(() => {
-    if (isOpen && orgId) {
-      fetchUsers(orgId);
-    }
-  }, [isOpen, orgId, fetchUsers]);
+const fetchedRef = useRef(false);
+
+useEffect(() => {
+  if (!isOpen || !orgId) return;
+  if (fetchedRef.current) return;
+
+  fetchedRef.current = true;
+  fetchUsers(orgId);
+}, [isOpen, orgId]);
+
+useEffect(() => {
+  if (!isOpen) {
+    fetchedRef.current = false;
+  }
+}, [isOpen]);
+
 
   const {
     control,
@@ -89,32 +103,44 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
   });
 
   const onSubmit = async (data: IssueFormData) => {
+    if (createIssueLoading) return;
+
     await createIssueFn(projectId, {
       ...data,
+      assigneeId: data.assigneeId || null,
       status,
       sprintId,
     });
   };
 
+
   useEffect(() => {
-    if (newIssue) {
-      reset();
-      onClose();
-      onIssueCreated();
-      toast.success("Issue added successfully");
-    }
-  }, [newIssue, reset, onClose, onIssueCreated]);
+    if (!newIssue) return;
+
+    reset();
+    onClose();
+    onIssueCreated();
+    toast.success("Issue added successfully");
+  }, [newIssue]);
+
 
   return (
     <Drawer open={isOpen} onClose={onClose}>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Create New Issue</DrawerTitle>
+           <DrawerDescription>
+              Fill the details to create a new issue.
+            </DrawerDescription>
         </DrawerHeader>
 
         {usersLoading && <BarLoader width="100%" />}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4">
+        <form onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit(onSubmit)(e);
+              }} 
+              className="p-4 space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Title</label>
             <Input {...register("title")} />
@@ -131,7 +157,7 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
               name="assigneeId"
               control={control}
               render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={field.onChange} value={field.value ?? ""}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select assignee" />
                   </SelectTrigger>
@@ -185,7 +211,7 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
 
           {error && <p className="text-red-500">{error.message}</p>}
 
-          <Button type="submit" disabled={createIssueLoading} className="w-full">
+          <Button type="button" disabled={createIssueLoading} className="w-full" onClick={handleSubmit(onSubmit)}>
             {createIssueLoading ? "Creating..." : "Create Issue"}
           </Button>
         </form>

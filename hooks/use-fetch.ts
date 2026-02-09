@@ -27,8 +27,12 @@ const useFetch = <T, A extends any[] = any[]>(
       setLoading(false);
     }
   };
+  const reset = () => {
+    setData(undefined);
+    setError(null);
+  };
 
-  return { data, loading, error, fn, setData };
+  return { data, loading, error, fn, setData, reset };
 };
 
 export default useFetch;

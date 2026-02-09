@@ -32,3 +32,13 @@ export type IssueFull = Prisma.IssueGetPayload<{
     sprint: true;
   };
 }>;
+
+
+export type Project = Prisma.ProjectGetPayload<{}>;
+
+export type ProjectWithRelations = Prisma.ProjectGetPayload<{
+  include: {
+    issues: true;
+    sprints: true;
+  };
+}>;

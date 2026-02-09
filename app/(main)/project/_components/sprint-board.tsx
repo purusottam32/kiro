@@ -63,13 +63,12 @@ export default function SprintBoard({
   const [currentSprint, setCurrentSprint] = useState<Sprint | null>(null);
 
   useEffect(() => {
-    if (!sprints || sprints.length === 0) return;
+    if (!sprints.length) return;
+    setCurrentSprint(
+      sprints.find((s) => s.status === "ACTIVE") ?? sprints[0]
+    );
+  }, []);
 
-    const active =
-      sprints.find((s) => s.status === "ACTIVE") ?? sprints[0];
-
-    setCurrentSprint(active);
-  }, [sprints]);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] =
@@ -95,7 +94,7 @@ export default function SprintBoard({
   }, [currentSprint?.id]);
 
   useEffect(() => {
-    setFilteredIssues(issues);
+    setFilteredIssues(issues ?? []);
   }, [issues]);
 
   /* -------- CREATE ISSUE -------- */
@@ -140,7 +139,8 @@ export default function SprintBoard({
       return;
     }
 
-    const newOrderedData = [...issues];
+    const newOrderedData = [...(issues ?? [])];
+
 
     const sourceList = newOrderedData.filter(
       (i) => i.status === source.droppableId
@@ -238,11 +238,20 @@ export default function SprintBoard({
                                 fetchIssues(currentSprint.id);
                               }}
                               onUpdate={(updated) =>
-                                setIssues((prev) =>
-                                  prev.map((i) =>
-                                    i.id === updated.id ? updated : i
-                                  )
-                                )
+                                setIssues((prev) => {
+                                  if (!prev) return prev;
+                                  let changed = false;
+
+                                  const next = prev.map((i) => {
+                                    if (i.id === updated.id) {
+                                      changed = true;
+                                      return updated;
+                                    }
+                                    return i;
+                                  });
+
+                                  return changed ? next : prev;
+                                })
                               }
                             />
                           </div>

@@ -79,9 +79,7 @@ export default function IssueDetailsDialog({
     error: deleteError,
     fn: deleteIssueFn,
     data: deleted,
-  } = useFetch<{ success: boolean }, [string]>(deleteIssue, {
-    success: false,
-  });
+  } = useFetch<{ success: boolean }, [string]>(deleteIssue, { success: false,});
 
   /* -------- UPDATE -------- */
 
@@ -91,9 +89,7 @@ export default function IssueDetailsDialog({
     fn: updateIssueFn,
     data: updated,
   } = useFetch<IssueWithRelations, [string, { status: IssueStatus; priority: IssuePriority }]>(
-    updateIssue,
-    issue
-  );
+    updateIssue,undefined);
 
   /* -------- HANDLERS -------- */
 
@@ -123,11 +119,11 @@ export default function IssueDetailsDialog({
   }, [deleted, onClose, onDelete]);
 
   useEffect(() => {
-    if (updated) {
-      onUpdate?.(updated);
-    }
-  }, [updated, onUpdate]);
+    if (!updated) return;
+    if (updated.id !== issue.id) return;
 
+    onUpdate?.(updated);
+  }, [updated, issue.id, onUpdate]);
   /* -------- PERMISSIONS -------- */
 
   const canChange =

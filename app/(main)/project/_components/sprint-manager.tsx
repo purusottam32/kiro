@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -18,16 +18,15 @@ import {
   format,
 } from "date-fns";
 import useFetch from "@/hooks/use-fetch";
-import { useRouter } from "next/navigation";
 import { updateSprintStatus } from "@/actions/sprints";
+import type { Prisma } from "@/lib/generated/prisma/client";
 
 export type SprintStatus = "PLANNED" | "ACTIVE" | "COMPLETED";
-import type { Prisma } from "@/lib/generated/prisma/client";
 type Sprint = Prisma.SprintGetPayload<{}>;
 
 interface SprintManagerProps {
   sprint: Sprint;
-  setSprint: (sprint: Sprint) => void;
+  setSprint: React.Dispatch<React.SetStateAction<Sprint | null>>;
   sprints: Sprint[];
   projectId: string;
 }
@@ -36,19 +35,31 @@ export default function SprintManager({
   sprint,
   setSprint,
   sprints,
-  projectId,
 }: SprintManagerProps) {
-  const router = useRouter();
-
   const {
     fn: updateStatus,
     loading,
-    data: updatedStatus,
+    data,
   } = useFetch(updateSprintStatus, null);
+
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setNow(new Date());
+  }, []);
+
+  // ✅ update ONLY when server confirms change
+  useEffect(() => {
+    if (!data?.success) return;
+    if (data.sprint.id !== sprint.id) return;
+
+    setSprint(data.sprint);
+  }, [data, sprint.id, setSprint]);
+
+  if (!now) return null;
 
   const startDate = new Date(sprint.startDate);
   const endDate = new Date(sprint.endDate);
-  const now = new Date();
 
   const canStart =
     sprint.status === "PLANNED" &&
@@ -57,31 +68,17 @@ export default function SprintManager({
 
   const canEnd = sprint.status === "ACTIVE";
 
-  const handleStatusChange = async (newStatus: SprintStatus) => {
-    await updateStatus(sprint.id, newStatus);
-  };
-
-  useEffect(() => {
-    if (updatedStatus?.success) {
-      setSprint(updatedStatus.sprint);
-    }
-  }, [updatedStatus, setSprint]);
-
   const handleSprintChange = (value: string) => {
-    const selectedSprint = sprints.find((s) => s.id === value);
-    if (!selectedSprint) return;
+    if (value === sprint.id) return;
 
-    setSprint(selectedSprint);
-    router.replace(`/project/${projectId}`, undefined);
+    const next = sprints.find((s) => s.id === value);
+    if (!next) return;
+
+    setSprint(next);
   };
 
-  const getStatusText = () => {
-    if (sprint.status === "COMPLETED") return "Sprint Ended";
-    if (sprint.status === "ACTIVE" && isAfter(now, endDate))
-      return `Overdue by ${formatDistanceToNow(endDate)}`;
-    if (sprint.status === "PLANNED" && isBefore(now, startDate))
-      return `Starts in ${formatDistanceToNow(startDate)}`;
-    return null;
+  const handleStatusChange = async (status: SprintStatus) => {
+    await updateStatus(sprint.id, status);
   };
 
   return (
@@ -119,8 +116,10 @@ export default function SprintManager({
 
       {loading && <BarLoader width="100%" className="mt-2" />}
 
-      {getStatusText() && (
-        <Badge className="mt-3">{getStatusText()}</Badge>
+      {sprint.status === "ACTIVE" && isAfter(now, endDate) && (
+        <Badge className="mt-3">
+          Overdue by {formatDistanceToNow(endDate)}
+        </Badge>
       )}
     </>
   );

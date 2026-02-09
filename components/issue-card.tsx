@@ -49,12 +49,12 @@ export default function IssueCard({
   const router = useRouter();
 
   const onDeleteHandler = () => {
-    router.refresh();
+    // router.refresh();
     onDelete?.();
   };
 
   const onUpdateHandler = (updated: IssueWithRelations) => {
-    router.refresh();
+    // router.refresh();
     onUpdate?.(updated);
   };
 

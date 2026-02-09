@@ -7,7 +7,7 @@ import type { Prisma } from "@/lib/generated/prisma/client";
 type AvatarUser = Prisma.UserGetPayload<{}>;
 
 /* ---------------- COMPONENT ---------------- */
-
+                        
 const UserAvatar = ({ user }: { user?: AvatarUser | null }) => {
   return (
     <div className="flex items-center space-x-2 w-full">
@@ -29,3 +29,4 @@ const UserAvatar = ({ user }: { user?: AvatarUser | null }) => {
 };
 
 export default UserAvatar;
+    

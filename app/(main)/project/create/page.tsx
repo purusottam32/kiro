@@ -14,17 +14,13 @@ import { createProject } from "@/actions/projects";
 import { BarLoader } from "react-spinners";
 import OrgSwitcher from "@/components/org-switcher";
 import { z } from "zod";
+import type { Project } from "@/lib/types/prisma";
 
 /* ---------------- TYPES ---------------- */
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
-type Project = {
-  id: string;
-  name: string;
-  key: string;
-  description?: string | null;
-};
+
 
 /* ---------------- COMPONENT ---------------- */
 

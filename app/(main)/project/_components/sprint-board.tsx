@@ -23,6 +23,7 @@ import { getIssuesForSprint, updateIssueOrder } from "@/actions/issues";
 import SprintManager from "./sprint-manager";
 import IssueCreationDrawer from "./create-issue";
 import IssueCard from "@/components/issue-card";
+import BoardFilters from "./board-filters";
 // import BoardFilters from "./board-filters";
 
 /* ---------------- TYPES ---------------- */
@@ -84,8 +85,23 @@ export default function SprintBoard({
     setData: setIssues,
   } = useFetch(getIssuesForSprint, []);
 
-  const [filteredIssues, setFilteredIssues] =
-    useState<IssueWithRelations[]>([]);
+  const [filters, setFilters] = useState({
+    search: "",
+    assignees: [] as string[],
+    priority: "",
+  });
+  const filteredIssues = (issues ?? []).filter((issue) => {
+      return (
+        issue.title
+          .toLowerCase()
+          .includes(filters.search.toLowerCase()) &&
+        (filters.assignees.length === 0 ||
+          filters.assignees.includes(issue.assignee?.id ?? "")) &&
+        (filters.priority === "" ||
+          issue.priority === filters.priority)  
+      );
+  });
+
 
   useEffect(() => {
     if (!currentSprint?.id) return;
@@ -93,9 +109,6 @@ export default function SprintBoard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSprint?.id]);
 
-  useEffect(() => {
-    setFilteredIssues(issues ?? []);
-  }, [issues]);
 
   /* -------- CREATE ISSUE -------- */
 
@@ -192,6 +205,14 @@ export default function SprintBoard({
         projectId={projectId}
       />
 
+      {issues && !issuesLoading && (
+        <BoardFilters
+          issues={issues}
+          filters={filters}
+          onChange={setFilters}
+        />
+
+      )} 
       {updateIssuesError && (
         <p className="text-red-500 mt-2">
           {updateIssuesError.message}
@@ -215,7 +236,7 @@ export default function SprintBoard({
                   <h3 className="font-semibold mb-2 text-center">
                     {column.name}
                   </h3>
-
+ 
                   {filteredIssues
                     .filter((i) => i.status === column.key)
                     .map((issue, index) => (

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { getUserIssues } from "@/actions/organizations";
+import { getUserIssues } from "@/actions/issues";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IssueCard from "@/components/issue-card";
 import type { Prisma } from "@/lib/generated/prisma/client";
@@ -30,11 +30,11 @@ export default async function UserIssues({ userId }: UserIssuesProps) {
   if (!issues.length) return null;
 
   const assignedIssues = issues.filter(
-    (issue) => issue.assignee?.id === userId
+    (issue) => issue.assignee?.clerkUserId === userId
   );
 
   const reportedIssues = issues.filter(
-    (issue) => issue.reporter.id === userId
+    (issue) => issue.reporter.clerkUserId === userId
   );
 
   return (

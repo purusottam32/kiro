@@ -215,3 +215,38 @@ export async function updateIssue(
 
   return updatedIssue;
 }
+
+export async function getUserIssues(userId: string){
+  const {orgId} = await auth();
+
+  if(!orgId || !userId){
+    throw new Error("Unauthorized");
+  }
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+  if(!user){
+    throw new Error("User not found");
+  }
+
+  const issues = await db.issue.findMany({
+    where: {
+      OR : [
+        { assigneeId: user.id },
+        { reporterId: user.id },
+      ],
+      project: {
+        organizationId: orgId,
+      },
+    },
+    include: {
+      project: true,
+      assignee: true,
+      reporter: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    }
+ });
+ return issues;
+}

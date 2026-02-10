@@ -128,10 +128,10 @@
 
 @layer utilities {
   .gradient-title {
-    @apply font-extrabold bg-gradient-to-r 
+    @apply font-extrabold bg-linear-to-r 
     from-white 
-    via-[var(--brand-blue)] 
-    to-white 
+    to-[var(--brand-blue)] 
+
     bg-clip-text text-transparent tracking-tight;
   }
 }

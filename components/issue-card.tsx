@@ -33,11 +33,12 @@ type IssueCardProps = {
 /* ---------------- UI ---------------- */
 
 const priorityColor: Record<Priority, string> = {
-  LOW: "border-green-600",
-  MEDIUM: "border-yellow-300",
-  HIGH: "border-orange-400",
-  URGENT: "border-red-400",
+  LOW: "bg-green-500",
+  MEDIUM: "bg-yellow-400",
+  HIGH: "bg-orange-500",
+  URGENT: "bg-red-500",
 };
+
 
 export default function IssueCard({
   issue,
@@ -65,29 +66,52 @@ export default function IssueCard({
   return (
     <>
     <Card
-      className="cursor-pointer hover:shadow-md transition-shadow"
       onClick={() => setIsDialogOpen(true)}
+      className={`
+        cursor-pointer
+        bg-neutral-900/80
+        border border-neutral-800
+        rounded-xl
+        transition-all duration-200
+        hover:shadow-lg hover:shadow-black/40
+        hover:-translate-y-0.5
+      `}
     >
-      <CardHeader
-        className={`border-t-2 ${priorityColor[issue.priority]} rounded-lg`}
-      >
-        <CardTitle>{issue.title}</CardTitle>
+      {/* TOP PRIORITY STRIP */}
+      <div
+        className={`h-1 rounded-t-xl ${priorityColor[issue.priority]}`}
+      />
+
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm font-semibold tracking-wide text-white line-clamp-2">
+          {issue.title}
+        </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex gap-2 -mt-3">
-        {showStatus && <Badge>{issue.status}</Badge>}
-        <Badge variant="outline" className="-ml-1">
+      <CardContent className="flex items-center gap-2 pb-3">
+        {showStatus && (
+          <Badge variant="secondary" className="text-xs">
+            {issue.status}
+          </Badge>
+        )}
+
+        <Badge
+          variant="outline"
+          className="text-xs border-neutral-600 text-neutral-300"
+        >
           {issue.priority}
         </Badge>
       </CardContent>
 
-      <CardFooter className="flex flex-col items-start space-y-3">
+      <CardFooter className="flex items-center justify-between pt-2">
         <UserAvatar user={issue.assignee ?? undefined} />
-        <div className="text-xs text-gray-400 w-full">
-          Created {created}
-        </div>
+
+        <span className="text-[11px] text-neutral-400">
+          {created}
+        </span>
       </CardFooter>
     </Card>
+
 
     {isDialogOpen && <IssueDetailsDialog
       isOpen={isDialogOpen}

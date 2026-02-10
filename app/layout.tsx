@@ -1,24 +1,20 @@
 
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import {ThemeProvider} from "../components/theme-provider";
-import { Inter } from "next/font/google";
+
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes'
 import Header from "../components/header";
 import { Toaster } from "sonner";
-const inter = Inter({ subsets: ["latin"] });
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata = {
@@ -47,7 +43,7 @@ export default function RootLayout({
             <footer className="bg-gray-900 py-12">
               <div className="container mx-auto px-4 text-center text-grey-200">
                 <p>
-                  &copy; {new Date().getFullYear()} kiro. All rights reserved.
+                  &copy; {new Date().getFullYear()} INFLUCRAFT. All rights reserved.
                 </p>
               </div>
             </footer>

@@ -78,6 +78,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --brand-blue: #0A5BFF;
 }
 
 .dark {
@@ -112,6 +113,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --brand-blue: #0A5BFF;
 }
 
 @layer base {
@@ -126,16 +128,22 @@
 
 @layer utilities {
   .gradient-title {
-    @apply font-extrabold bg-gradient-to-br from-gray-700 via-gray-100 to-gray-500 bg-clip-text tracking-tighter text-transparent pr-2 pb-2;
+    @apply font-extrabold bg-gradient-to-r 
+    from-white 
+    via-[var(--brand-blue)] 
+    to-white 
+    bg-clip-text text-transparent tracking-tight;
   }
 }
 
-.dotted-background{
-    background-color : rgb(51, 51, 59);
-    background-image: radial-gradient(#c4b8b8 1px, transparent 1px);
-    background-size: 30px 30px;
+.dotted-background {
+  background-color: #000000;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
 }
-
 
 .wmde-markdown ul {
   list-style-type: disc;

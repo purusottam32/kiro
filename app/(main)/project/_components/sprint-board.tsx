@@ -24,7 +24,6 @@ import SprintManager from "./sprint-manager";
 import IssueCreationDrawer from "./create-issue";
 import IssueCard from "@/components/issue-card";
 import BoardFilters from "./board-filters";
-// import BoardFilters from "./board-filters";
 
 /* ---------------- TYPES ---------------- */
 
@@ -59,17 +58,22 @@ export default function SprintBoard({
   projectId,
   orgId,
 }: SprintBoardProps) {
-  /* -------- CURRENT SPRINT (SAFE) -------- */
+  /* -------- CURRENT SPRINT -------- */
 
   const [currentSprint, setCurrentSprint] = useState<Sprint | null>(null);
 
   useEffect(() => {
-    if (!sprints.length) return;
+    if (!sprints.length) {
+      setCurrentSprint(null);
+      return;
+    }
+
     setCurrentSprint(
       sprints.find((s) => s.status === "ACTIVE") ?? sprints[0]
     );
-  }, []);
+  }, [sprints]);
 
+  /* -------- DRAWER -------- */
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] =
@@ -85,30 +89,29 @@ export default function SprintBoard({
     setData: setIssues,
   } = useFetch(getIssuesForSprint, []);
 
-  const [filters, setFilters] = useState({
-    search: "",
-    assignees: [] as string[],
-    priority: "",
-  });
-  const filteredIssues = (issues ?? []).filter((issue) => {
-      return (
-        issue.title
-          .toLowerCase()
-          .includes(filters.search.toLowerCase()) &&
-        (filters.assignees.length === 0 ||
-          filters.assignees.includes(issue.assignee?.id ?? "")) &&
-        (filters.priority === "" ||
-          issue.priority === filters.priority)  
-      );
-  });
-
-
   useEffect(() => {
     if (!currentSprint?.id) return;
     fetchIssues(currentSprint.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSprint?.id]);
 
+  /* -------- FILTERS -------- */
+
+  const [filters, setFilters] = useState({
+    search: "",
+    assignees: [] as string[],
+    priority: "",
+  });
+
+  const filteredIssues = (issues ?? []).filter((issue) => {
+    return (
+      issue.title.toLowerCase().includes(filters.search.toLowerCase()) &&
+      (filters.assignees.length === 0 ||
+        filters.assignees.includes(issue.assignee?.id ?? "")) &&
+      (filters.priority === "" ||
+        issue.priority === filters.priority)
+    );
+  });
 
   /* -------- CREATE ISSUE -------- */
 
@@ -154,7 +157,6 @@ export default function SprintBoard({
 
     const newOrderedData = [...(issues ?? [])];
 
-
     const sourceList = newOrderedData.filter(
       (i) => i.status === source.droppableId
     );
@@ -178,20 +180,42 @@ export default function SprintBoard({
       destinationList.forEach((card, i) => (card.order = i));
     }
 
-    const sorted = newOrderedData.sort(
-      (a, b) => a.order - b.order
-    );
+    const sorted = newOrderedData.sort((a, b) => a.order - b.order);
 
     setIssues(sorted);
     updateIssueOrderFn(sorted);
   };
 
+  /* ---------------- EMPTY & ERROR STATES ---------------- */
+
+  // 🚫 NO SPRINTS
+  if (sprints.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <h2 className="text-2xl font-bold mb-2">No sprints yet</h2>
+        <p className="text-gray-400 mb-6 max-w-md">
+          This project doesn’t have any sprints.
+          Create your first sprint to start planning work.
+        </p>
+        {/* <Button onClick={() => toast.info("Create a sprint from the top-right button")}>
+          Create Sprint
+        </Button> */}
+      </div>
+    );
+  }
+
+  // ⏳ LOADING CURRENT SPRINT
   if (!currentSprint) {
-    return <div className="p-4">Loading sprint...</div>;
+    return (
+      <div className="flex items-center gap-3 p-4 text-gray-400">
+        <BarLoader width={120} color="#0A5BFF" />
+        <span>Loading sprint…</span>
+      </div>
+    );
   }
 
   if (issuesError) {
-    return <div>Error loading issues</div>;
+    return <div className="p-4 text-red-500">Error loading issues</div>;
   }
 
   /* ---------------- UI ---------------- */
@@ -211,8 +235,8 @@ export default function SprintBoard({
           filters={filters}
           onChange={setFilters}
         />
+      )}
 
-      )} 
       {updateIssuesError && (
         <p className="text-red-500 mt-2">
           {updateIssuesError.message}
@@ -220,7 +244,7 @@ export default function SprintBoard({
       )}
 
       {(issuesLoading || updateIssuesLoading) && (
-        <BarLoader className="mt-4" width="100%" color="#36d7b7" />
+        <BarLoader className="mt-4" width="100%" color="#0A5BFF" />
       )}
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -236,7 +260,7 @@ export default function SprintBoard({
                   <h3 className="font-semibold mb-2 text-center">
                     {column.name}
                   </h3>
- 
+
                   {filteredIssues
                     .filter((i) => i.status === column.key)
                     .map((issue, index) => (
@@ -254,24 +278,15 @@ export default function SprintBoard({
                           >
                             <IssueCard
                               issue={issue}
-                              onDelete={() => {
-                                if (!currentSprint?.id) return;
-                                fetchIssues(currentSprint.id);
-                              }}
+                              onDelete={() =>
+                                fetchIssues(currentSprint.id)
+                              }
                               onUpdate={(updated) =>
                                 setIssues((prev) => {
                                   if (!prev) return prev;
-                                  let changed = false;
-
-                                  const next = prev.map((i) => {
-                                    if (i.id === updated.id) {
-                                      changed = true;
-                                      return updated;
-                                    }
-                                    return i;
-                                  });
-
-                                  return changed ? next : prev;
+                                  return prev.map((i) =>
+                                    i.id === updated.id ? updated : i
+                                  );
                                 })
                               }
                             />

@@ -46,90 +46,147 @@ export default function Home() {
       </div>
 
       {/* HERO */}
-      <section className="relative min-h-screen flex items-center justify-center text-center px-4 pt-10">
-        <div className="container mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight">
-            Stop managing chaos.
+      <section className="relative min-h-screen flex items-center justify-center text-center px-4 pt-0 overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute  left-10 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl animate-float"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-purple-600/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }}></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
+          {/* Main Headline */}
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] mb-6 -mt-20 animate-slide-in" style={{ animationDelay: '0.1s' }}>
+            <span className="text-white">Stop managing</span>
             <br />
-            Start executing with{" "}
-            <span className="bg-linear-to-r from-[#0A5BFF] to-[#3B82F6] bg-clip-text text-transparent tracking-[0.15em] sm:tracking-[0.25em]">
-              KIRO
+            <span className="text-white">chaos. Start</span>
+            <br />
+            <span className="bg-linear-to-r from-blue-400 via-blue-500 to-cyan-400 bg-clip-text text-transparent animate-glow">
+              executing
             </span>
           </h1>
 
-          <p className="mt-6 text-base sm:text-lg text-gray-400 max-w-xl mx-auto">
-            Sprint-based project management built for fast teams.
-            No workflows. No bloat. Just execution.
+          {/* Subheading */}
+          <p className="mt-8 text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed animate-slide-in" style={{ animationDelay: '0.2s' }}>
+            Sprint-based project management built for teams that ship.
+            <span className="block mt-2 text-slate-400 text-base">No workflows. No bloat. Just execution.</span>
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Stats Section */}
+          <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto mb-10 animate-slide-in" style={{ animationDelay: '0.3s' }}>
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-blue-400">500+</div>
+              <div className="text-xs sm:text-sm text-slate-400 mt-2">Active Teams</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-blue-400">10K+</div>
+              <div className="text-xs sm:text-sm text-slate-400 mt-2">Projects Tracked</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl sm:text-4xl font-bold text-blue-400">99.9%</div>
+              <div className="text-xs sm:text-sm text-slate-400 mt-2">Uptime</div>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center animate-slide-in" style={{ animationDelay: '0.4s' }}>
             <Link href="/onboarding">
-              <Button className="w-full sm:w-auto px-10 bg-[#0A5BFF] hover:bg-[#1F6CFF]">
-                Get Started
+              <Button size="lg" className="w-full sm:w-auto px-10 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5">
+                Get Started Free
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
 
             <Link href="#features">
               <Button
+                size="lg"
                 variant="outline"
-                className="w-full sm:w-auto px-10 border-white/20 text-white hover:bg-white/10"
+                className="w-full sm:w-auto px-10 py-6 text-base font-semibold border-2 border-slate-600 text-white hover:bg-slate-700/50 hover:border-blue-500 transition-all duration-300 backdrop-blur-sm"
               >
-                Learn More
+                See How It Works
               </Button>
             </Link>
           </div>
+
+          {/* Features Quick Preview */}
+          {/* <div className="mt-16 flex flex-wrap gap-3 justify-center animate-slide-in" style={{ animationDelay: '0.5s' }}>
+            {['📊 Real-time Analytics', '🚀 Sprint Management', '👥 Team Collaboration'].map((feature, index) => (
+              <div key={index} className="px-4 py-2 bg-slate-800/40 border border-slate-700/50 rounded-full text-sm text-slate-300 hover:bg-slate-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-default">
+                {feature}
+              </div>
+            ))}
+          </div> */}
         </div>
       </section>
 
       {/* FEATURES */}
       <section
         id="features"
-        className="py-24 sm:py-32 border-t border-white/10 px-4"
+        className="py-24 sm:py-32 border-t border-white/10 px-4 bg-gradient-to-b from-slate-950 to-slate-900/50"
       >
         <div className="container mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-bold mb-12 sm:mb-16 text-center">
-            Features
-          </h3>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4">
+              Powerful Features
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Everything you need to manage sprints, track progress, and keep your team aligned.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => (
-              <Card
+              <div
                 key={index}
-                className="bg-[#0B1220] border border-[#111827] rounded-xl"
+                className="group relative p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 via-slate-900/30 to-slate-950/50 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
               >
-                <CardContent className="pt-8 sm:pt-10">
-                  <feature.icon className="h-10 w-10 mb-6 text-[#0A5BFF]" />
-                  <h4 className="text-lg sm:text-xl font-semibold mb-3">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 rounded-2xl transition-all duration-300"></div>
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center h-12 w-12 rounded-lg bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors mb-4">
+                    <feature.icon className="h-6 w-6 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3 text-white">
                     {feature.title}
-                  </h4>
-                  <p className="text-sm text-[#9AA4B2] leading-relaxed">
+                  </h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">
                     {feature.description}
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 sm:py-20 px-4">
+      <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-900/50 to-slate-950">
         <div className="container mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-bold mb-10 text-center">
-            Frequently Asked Questions
-          </h3>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-slate-400">
+              Everything you need to know about KIRO
+            </p>
+          </div>
 
           <Accordion
             type="single"
             collapsible
-            className="max-w-full sm:max-w-3xl mx-auto"
+            className="max-w-3xl mx-auto"
           >
             {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left">
+              <AccordionItem 
+                key={index} 
+                value={`item-${index}`}
+                className="border-b border-slate-700/50 hover:border-blue-500/30 transition-colors"
+              >
+                <AccordionTrigger className="text-left text-white hover:text-blue-300 transition-colors py-4">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent>{faq.answer}</AccordionContent>
+                <AccordionContent className="text-slate-400 pb-4">
+                  {faq.answer}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -137,21 +194,55 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 text-center px-4">
-        <div className="container mx-auto">
-          <h3 className="text-2xl sm:text-3xl font-bold mb-6">
-            Built for teams that ship.
-          </h3>
-          <p className="text-base sm:text-lg text-[#9AA4B2] mb-10 max-w-xl mx-auto">
-            KIRO removes friction so your team can focus on execution.
+      <section className="py-20 sm:py-32 text-center px-4 bg-gradient-to-b from-slate-950 to-black relative overflow-hidden">
+        {/* Background gradient elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-600/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto relative z-10">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+            Built for teams that
+            <br />
+            <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              ship
+            </span>
+          </h2>
+          <p className="text-lg sm:text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
+            KIRO removes friction from your workflow so your team can focus on what matters—execution.
           </p>
 
-          <Link href="/onboarding">
-            <Button size="lg" className="px-10">
-              Start for free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/onboarding">
+              <Button size="lg" className="px-12 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5">
+                Start for Free
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+
+            <Link href="/onboarding">
+              <Button size="lg" variant="outline" className="px-12 py-6 text-base font-semibold border-2 border-slate-600 hover:border-blue-500 hover:bg-slate-700/30 transition-all duration-300">
+                Schedule Demo
+              </Button>
+            </Link>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="mt-16 flex flex-wrap justify-center gap-8">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">4.9/5</div>
+              <div className="text-sm text-slate-400">Customer Rating</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">24/7</div>
+              <div className="text-sm text-slate-400">Support Available</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">No CC</div>
+              <div className="text-sm text-slate-400">Required to Start</div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

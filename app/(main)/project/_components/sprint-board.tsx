@@ -248,18 +248,28 @@ export default function SprintBoard({
       )}
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 bg-slate-900 p-4 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-white/5">
           {statuses.map((column) => (
             <Droppable key={column.key} droppableId={column.key}>
-              {(provided) => (
+              {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="space-y-2"
+                  className={`space-y-2 min-h-[600px] p-4 rounded-xl transition-all duration-200 ${
+                    snapshot.isDraggingOver
+                      ? 'bg-blue-500/10 border border-blue-500/30'
+                      : 'bg-white/5 border border-white/10 hover:border-white/20'
+                  }`}
                 >
-                  <h3 className="font-semibold mb-2 text-center">
-                    {column.name}
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-sm uppercase tracking-wider text-gray-300 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500"></span>
+                      {column.name}
+                    </h3>
+                    <span className="text-xs bg-white/10 px-2 py-1 rounded-full text-gray-400">
+                      {filteredIssues.filter((i) => i.status === column.key).length}
+                    </span>
+                  </div>
 
                   {filteredIssues
                     .filter((i) => i.status === column.key)
@@ -301,7 +311,7 @@ export default function SprintBoard({
                     currentSprint.status !== "COMPLETED" && (
                       <Button
                         variant="ghost"
-                        className="w-full"
+                        className="w-full mt-4 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 border border-dashed border-blue-500/30 hover:border-blue-500/50 transition-all duration-200"
                         onClick={() => handleAddIssue(column.key)}
                       >
                         <Plus className="mr-2 h-4 w-4" />

@@ -69,35 +69,36 @@ export default function IssueCard({
       onClick={() => setIsDialogOpen(true)}
       className={`
         cursor-pointer
-        bg-neutral-900/80
-        border border-neutral-800
+        bg-gradient-to-br from-slate-800/60 via-slate-900/40 to-slate-900/60
+        border border-slate-700/50 hover:border-blue-500/50
         rounded-xl
-        transition-all duration-200
-        hover:shadow-lg hover:shadow-black/40
-        hover:-translate-y-0.5
+        transition-all duration-300
+        hover:shadow-xl hover:shadow-blue-500/10
+        hover:-translate-y-1
+        group
       `}
     >
-      {/* TOP PRIORITY STRIP */}
+      {/* TOP PRIORITY STRIP WITH GLOW */}
       <div
-        className={`h-1 rounded-t-xl ${priorityColor[issue.priority]}`}
+        className={`h-1.5 rounded-t-xl ${priorityColor[issue.priority]} shadow-lg transition-all group-hover:h-2`}
       />
 
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold tracking-wide text-white line-clamp-2">
+        <CardTitle className="text-sm font-semibold tracking-wide text-white line-clamp-2 group-hover:text-blue-300 transition-colors">
           {issue.title}
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex items-center gap-2 pb-3">
+      <CardContent className="flex items-center gap-2 pb-3 flex-wrap">
         {showStatus && (
-          <Badge variant="secondary" className="text-xs">
+          <Badge variant="secondary" className="text-xs bg-blue-500/20 text-blue-300 border-blue-500/30">
             {issue.status}
           </Badge>
         )}
 
         <Badge
           variant="outline"
-          className="text-xs border-neutral-600 text-neutral-300"
+          className="text-xs border-slate-600 text-slate-300 bg-slate-700/30 hover:bg-slate-700/50"
         >
           {issue.priority}
         </Badge>
@@ -106,7 +107,7 @@ export default function IssueCard({
       <CardFooter className="flex items-center justify-between pt-2">
         <UserAvatar user={issue.assignee ?? undefined} />
 
-        <span className="text-[11px] text-neutral-400">
+        <span className="text-[11px] text-slate-400 group-hover:text-slate-300 transition-colors">
           {created}
         </span>
       </CardFooter>

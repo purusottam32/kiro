@@ -22,21 +22,33 @@ const ProjectPage = async ({ params }: Props) => {
   }
 
   return (
-    <div className="container mx-auto">
-      {/* sprint creation */}
-      <SprintCreationForm
-        projectId={projectId}
-        projectTitle={project.name}
-        projectKey={project.key}
-        sprints={(project.sprints?.length ?? 0) + 1}
-      />
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="gradient-title text-4xl md:text-5xl mb-2">{project.name}</h1>
+          <p className="text-slate-400 text-sm">
+            Project Key: <span className="font-mono font-semibold text-blue-400">{project.key}</span>
+          </p>
+        </div>
 
-      {/* sprint board */}
-      <SprintBoard
-        sprints={project.sprints ?? []}
-        projectId={projectId}
-        orgId={project.organizationId}
-      />
+        {/* Sprint creation */}
+        <SprintCreationForm
+          projectId={projectId}
+          projectTitle={project.name}
+          projectKey={project.key}
+          sprints={(project.sprints?.length ?? 0) + 1}
+        />
+
+        {/* sprint board */}
+        <div className="mt-8">
+          <SprintBoard
+            sprints={project.sprints ?? []}
+            projectId={projectId}
+            orgId={project.organizationId}
+          />
+        </div>
+      </div>
     </div>
   );
 };

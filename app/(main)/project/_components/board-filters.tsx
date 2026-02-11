@@ -47,11 +47,12 @@ export default function BoardFilters({
     filters.assignees.length > 0 ||
     filters.priority;
 
-  return (
-    <div className="flex flex-wrap gap-3 mt-8 p-4 bg-gradient-to-r from-slate-900/50 to-slate-800/50 rounded-xl border border-white/5 items-center">
-      <Input
-        className="w-72 bg-slate-800/50 border-slate-700 focus:border-blue-500 focus:ring-blue-500/20 placeholder-slate-500"
-        placeholder="Search issues..."
+      new Map(
+        issues
+          .map((i) => i.assignee)
+          .filter((a): a is NonNullable<typeof a> => !!a)
+          .map((a) => [a.id, a])
+      ).values()
         value={filters.search}
         onChange={(e) =>
           onChange({ ...filters, search: e.target.value })
@@ -76,33 +77,31 @@ export default function BoardFilters({
                     ? filters.assignees.filter((id) => id !== assignee.id)
                     : [...filters.assignees, assignee.id],
                 })
-              }
-              title={assignee.name}
-            >
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={assignee.imageUrl ?? ""} />
-                <AvatarFallback className="bg-blue-500/30 text-blue-300">
-                  {assignee.name?.[0] ?? "?"}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          );
-        })}
-      </div>
-
-      <Select
-        value={filters.priority}
-        onValueChange={(value) =>
-          onChange({ ...filters, priority: value })
-        }
-      >
-        <SelectTrigger className="w-48 bg-slate-800/50 border-slate-700 focus:border-blue-500 focus:ring-blue-500/20">
-          <SelectValue placeholder="Priority" />
-        </SelectTrigger>
-        <SelectContent>
-          {priorities.map((p) => (
-            <SelectItem key={p} value={p}>
-              {p}
+          {assignees.map((assignee) => {
+            const selected = filters.assignees.includes(assignee.id);
+            return (
+              <div
+                key={assignee.id}
+                className={`rounded-full ring-2 cursor-pointer transition-all duration-200 ${
+                  selected ? "ring-blue-500 shadow-lg shadow-blue-500/30" : "ring-slate-700 hover:ring-blue-400"
+                }`}
+                onClick={() =>
+                  onChange({
+                    ...filters,
+                    assignees: selected
+                      ? filters.assignees.filter((id) => id !== assignee.id)
+                      : [...filters.assignees, assignee.id],
+                  })
+                }
+                title={assignee.name}
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={assignee.imageUrl || undefined} alt={assignee.name || "User"} />
+                  <AvatarFallback>{assignee.name?.[0] || "U"}</AvatarFallback>
+                </Avatar>
+              </div>
+            );
+          })}
             </SelectItem>
           ))}
         </SelectContent>

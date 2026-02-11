@@ -90,7 +90,7 @@ const SprintCreationForm = ({
   return (
     <>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-5xl font-bold gradient-title">
+        <h1 className="text-5xl font-bold ">
           {projectTitle}
         </h1>
 

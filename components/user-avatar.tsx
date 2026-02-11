@@ -21,7 +21,7 @@ const UserAvatar = ({ user }: { user?: AvatarUser | null }) => {
         </AvatarFallback>
       </Avatar>
 
-      <span className="text-xs text-gray-500">
+      <span className="text-xs text-slate-300">
         {user?.name ?? "Unassigned"}
       </span>
     </div>

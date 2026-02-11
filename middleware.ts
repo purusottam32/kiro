@@ -17,12 +17,18 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return redirectToSignIn();
   }
 
-  // ❌ Logged in but no org → force onboarding
+  // ✅ Allow access to /organizations even without orgId
+  if (req.nextUrl.pathname.startsWith("/organizations")) {
+    return NextResponse.next();
+  }
+
+  // ❌ Logged in but no org → force onboarding (only for other protected routes)
   if (
     userId &&
     !orgId &&
     req.nextUrl.pathname !== "/onboarding" &&
-    req.nextUrl.pathname !== "/"
+    req.nextUrl.pathname !== "/" &&
+    isProtectedRoute(req)
   ) {
     return NextResponse.redirect(new URL("/onboarding", req.url));
   }

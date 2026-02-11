@@ -83,7 +83,7 @@ export default function CreateProjectPage() {
   if (!isAdmin) {
     return (
       <div className="flex flex-col gap-2 items-center">
-        <span className="text-2xl gradient-title">
+        <span className="text-2xl">
           Oops! Only Admins can create projects.
         </span>
         <OrgSwitcher />
@@ -95,7 +95,7 @@ export default function CreateProjectPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-6xl text-center font-bold mb-8 gradient-title">
+      <h1 className="text-6xl text-center font-bold mb-8 ">
         Create New Project
       </h1>
 

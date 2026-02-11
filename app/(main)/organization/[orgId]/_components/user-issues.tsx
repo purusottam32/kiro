@@ -39,7 +39,7 @@ export default async function UserIssues({ userId }: UserIssuesProps) {
 
   return (
     <>
-      <h1 className="text-4xl font-bold gradient-title mb-4">
+      <h1 className="text-4xl font-bold mb-4">
         My Issues
       </h1>
 

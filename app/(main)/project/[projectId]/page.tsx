@@ -25,12 +25,12 @@ const ProjectPage = async ({ params }: Props) => {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="mb-8">
-          <h1 className="gradient-title text-4xl md:text-5xl mb-2">{project.name}</h1>
+        {/* <div className="mb-8">
+          <h1 className=" text-4xl md:text-5xl mb-2">{project.name}</h1>
           <p className="text-slate-400 text-sm">
             Project Key: <span className="font-mono font-semibold text-blue-400">{project.key}</span>
           </p>
-        </div>
+        </div> */}
 
         {/* Sprint creation */}
         <SprintCreationForm

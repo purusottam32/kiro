@@ -23,7 +23,7 @@ const DeleteProject = ({ projectId }: { projectId: string }) => {
     error,
     fn: deleteProjectFn,
     data: deleted,
-  } = useFetch<DeleteProjectResponse | null>(deleteProject,null);
+  } = useFetch<DeleteProjectResponse | null, [string]>(deleteProject, null);
   
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;

@@ -33,8 +33,9 @@ export default function BoardFilters({
   const assignees = Array.from(
     new Map(
       issues
-        .filter((i) => i.assignee)
-        .map((i) => [i.assignee?.id, i.assignee])
+        .map((i) => i.assignee)
+        .filter((a): a is NonNullable<typeof a> => !!a)
+        .map((a) => [a.id, a])
     ).values()
   );
 
@@ -47,12 +48,11 @@ export default function BoardFilters({
     filters.assignees.length > 0 ||
     filters.priority;
 
-      new Map(
-        issues
-          .map((i) => i.assignee)
-          .filter((a): a is NonNullable<typeof a> => !!a)
-          .map((a) => [a.id, a])
-      ).values()
+  return (
+    <div className="flex flex-wrap gap-3 mt-8 p-4 bg-gradient-to-r from-slate-900/50 to-slate-800/50 rounded-xl border border-white/5 items-center">
+      <Input
+        className="w-72 bg-slate-800/50 border-slate-700 focus:border-blue-500 focus:ring-blue-500/20 placeholder-slate-500"
+        placeholder="Search issues..."
         value={filters.search}
         onChange={(e) =>
           onChange({ ...filters, search: e.target.value })

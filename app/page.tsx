@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BarChart, Calendar, Layout, Star, Users, Zap } from "lucide-react";
+import { ArrowRight, BarChart, Calendar, Layout, Users, Zap } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import faqs from "@/data/faqs.json";
-import CompanyCarousel from "@/components/company-carousel";
+
 import {
   Accordion,
   AccordionContent,
@@ -110,7 +109,7 @@ export default function Home() {
           {/* CTA Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center animate-slide-in" style={{ animationDelay: '0.4s' }}>
             <Link href="/onboarding">
-              <Button size="lg" className="w-full sm:w-auto px-10 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5">
+              <Button size="lg" className="w-full sm:w-auto px-10 py-6 text-base font-semibold bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5">
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -151,11 +150,11 @@ export default function Home() {
       {/* FEATURES */}
       <section
         id="features"
-        className="py-24 sm:py-32 border-t border-white/10 px-4 bg-gradient-to-b from-slate-950 to-slate-900/50"
+        className="py-24 sm:py-32 border-t border-white/10 px-4 bg-linear-to-b from-slate-950 to-slate-900/50"
       >
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-slide-down">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-linear-to-r from-white to-slate-300 bg-clip-text text-transparent">
               Powerful Features
             </h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
@@ -167,10 +166,10 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="group relative p-8 rounded-2xl bg-gradient-to-br from-slate-800/50 via-slate-900/30 to-slate-950/50 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 animate-fade-in"
+                className="group relative p-8 rounded-2xl bg-linear-to-br from-slate-800/50 via-slate-900/30 to-slate-950/50 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 rounded-2xl transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 rounded-2xl transition-all duration-300"></div>
                 <div className="relative z-10">
                   <div className="inline-flex items-center justify-center h-12 w-12 rounded-lg bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors mb-4">
                     <feature.icon className="h-6 w-6 text-blue-400" />
@@ -250,7 +249,7 @@ export default function Home() {
       </section> */}
 
       {/* FAQ */}
-      <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-900/50 to-slate-950">
+      <section className="py-16 sm:py-20 px-4 bg-linear-to-b from-slate-900/50 to-slate-950">
         <div className="container mx-auto">
           <div className="text-center mb-12 animate-slide-down">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -286,7 +285,7 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 sm:py-32 text-center px-4 bg-gradient-to-b from-slate-950 to-black relative overflow-hidden">
+      <section className="py-20 sm:py-32 text-center px-4 bg-linear-to-b from-slate-950 to-black relative overflow-hidden">
         {/* Background gradient elements */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl animate-float"></div>
@@ -307,7 +306,7 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-down" style={{ animationDelay: '0.2s' }}>
             <Link href="/onboarding">
-              <Button size="lg" className="px-12 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
+              <Button size="lg" className="px-12 py-6 text-base font-semibold bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>

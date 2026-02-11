@@ -14,7 +14,7 @@ import {
 
 import { IssueStatus } from "@/lib/generated/prisma/enums";
 import type { Prisma } from "@/lib/generated/prisma/client";
-import type { IssueWithRelations } from "@/lib/types/prisma";
+// import type { IssueWithRelations } from "@/lib/types/prisma";
 
 import useFetch from "@/hooks/use-fetch";
 import rawStatuses from "@/data/status.json";
@@ -248,7 +248,7 @@ export default function SprintBoard({
       )}
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-white/5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 p-6 rounded-2xl border border-white/5">
           {statuses.map((column) => (
             <Droppable key={column.key} droppableId={column.key}>
               {(provided, snapshot) => (
@@ -263,7 +263,7 @@ export default function SprintBoard({
                 >
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-sm uppercase tracking-wider text-gray-300 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500"></span>
+                      <span className="w-2 h-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-500"></span>
                       {column.name}
                     </h3>
                     <span className="text-xs bg-white/10 px-2 py-1 rounded-full text-gray-400">

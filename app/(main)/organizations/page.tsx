@@ -4,6 +4,7 @@ import { useUser, useOrganizationList } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
+import Image from "next/image";
 
 export default function OrganizationsPage() {
   const { isLoaded: isUserLoaded } = useUser();
@@ -86,9 +87,11 @@ export default function OrganizationsPage() {
                   </p>
                 </div>
                 {membership.organization.imageUrl && (
-                  <img
+                  <Image
                     src={membership.organization.imageUrl}
                     alt={membership.organization.name}
+                    width={48}
+                    height={48}
                     className="w-12 h-12 rounded-lg"
                   />
                 )}

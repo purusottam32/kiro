@@ -72,13 +72,16 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
 
 const fetchedRef = useRef(false);
 
+
 useEffect(() => {
   if (!isOpen || !orgId) return;
   if (fetchedRef.current) return;
 
   fetchedRef.current = true;
   fetchUsers(orgId);
-}, [isOpen, orgId]);
+
+}, [isOpen, orgId, fetchUsers]);
+
 
 useEffect(() => {
   if (!isOpen) {
@@ -114,6 +117,7 @@ useEffect(() => {
   };
 
 
+
   useEffect(() => {
     if (!newIssue) return;
 
@@ -121,7 +125,8 @@ useEffect(() => {
     onClose();
     onIssueCreated();
     toast.success("Issue added successfully");
-  }, [newIssue]);
+
+  }, [newIssue, reset, onClose, onIssueCreated]);
 
 
   return (

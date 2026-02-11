@@ -16,7 +16,7 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "kiro",
   description: "Project management app",
 };
@@ -45,7 +45,7 @@ export default function RootLayout({
                   &copy; {new Date().getFullYear()} KIRO - Project Management Platform. All rights reserved.
                 </p>
                 <p className="text-xs text-slate-500 mt-2">
-                  Built with Next.js, Prisma, and Tailwind CSS
+                  Built with <span className="text-red-500">❤</span> by the team at Influcraft.  
                 </p>
               </div>
             </footer>

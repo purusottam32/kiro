@@ -4,11 +4,9 @@ import { useUser, useOrganizationList } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function OrganizationsPage() {
-  const { isLoaded: isUserLoaded, user } = useUser();
+  const { isLoaded: isUserLoaded } = useUser();
   const { isLoaded: isOrgListLoaded, userMemberships } = useOrganizationList({
     userMemberships: {
       infinite: true,
@@ -34,6 +32,14 @@ export default function OrganizationsPage() {
 
   const organizations = userMemberships?.data || [];
 
+  const formatRole = (role?: string | null) => {
+    if (!role) return "";
+    const parts = role.split(":");
+    const raw = parts[parts.length - 1] || role;
+    const label = raw.charAt(0).toUpperCase() + raw.slice(1);
+    return `Role: ${label}`;
+  };
+
   if (organizations.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -42,7 +48,8 @@ export default function OrganizationsPage() {
             No Organizations
           </h1>
           <p className="text-slate-400 mb-8">
-            You don't have any organizations yet. Create one to get started!
+            You don&apos;t have any organizations yet. Create one to get
+            started!
           </p>
           
         </div>
@@ -75,7 +82,7 @@ export default function OrganizationsPage() {
                     {membership.organization.name}
                   </h2>
                   <p className="text-sm text-slate-400 mt-1">
-                    {membership.role}
+                    {formatRole(membership.role)}
                   </p>
                 </div>
                 {membership.organization.imageUrl && (

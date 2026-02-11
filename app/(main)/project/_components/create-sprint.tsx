@@ -70,7 +70,7 @@ const SprintCreationForm = ({
       return;   
     }
 
-   try{
+   try {
      await createSprintFn(projectId, {
       name: data.name,                
       startDate: dateRange.from,      
@@ -80,8 +80,10 @@ const SprintCreationForm = ({
     toast.success("Sprint created successfully");
     setShowForm(false);
     router.refresh();
-   }catch(error: any){
-    toast.error(error.message || "Failed to create sprint");
+   } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to create sprint";
+    toast.error(message);
    }
   };
 

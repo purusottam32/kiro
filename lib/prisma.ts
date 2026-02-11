@@ -4,7 +4,6 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 declare global {
   // avoid creating multiple clients during HMR in dev
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 

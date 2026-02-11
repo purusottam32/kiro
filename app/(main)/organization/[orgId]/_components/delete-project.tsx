@@ -38,7 +38,7 @@ const DeleteProject = ({ projectId }: { projectId: string }) => {
       toast.error("Project deleted successfully");
       router.refresh();
     }
-  },[deleted]);
+  }, [deleted, router]);
   
   const isAdmin = membership?.role === "org:admin";
   if (!isAdmin) return null;

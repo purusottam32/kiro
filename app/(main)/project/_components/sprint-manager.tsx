@@ -22,7 +22,7 @@ import { updateSprintStatus } from "@/actions/sprints";
 import type { Prisma } from "@/lib/generated/prisma/client";
 
 export type SprintStatus = "PLANNED" | "ACTIVE" | "COMPLETED";
-type Sprint = Prisma.SprintGetPayload<{}>;
+type Sprint = Prisma.SprintGetPayload<Record<string, never>>;
 
 interface SprintManagerProps {
   sprint: Sprint;

@@ -4,7 +4,7 @@ import type { Prisma } from "@/lib/generated/prisma/client";
 
 /* ---------------- TYPES ---------------- */
 
-type AvatarUser = Prisma.UserGetPayload<{}>;
+type AvatarUser = Prisma.UserGetPayload<Record<string, never>>;
 
 /* ---------------- COMPONENT ---------------- */
                         

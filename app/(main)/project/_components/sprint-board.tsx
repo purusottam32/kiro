@@ -27,7 +27,7 @@ import BoardFilters from "./board-filters";
 
 /* ---------------- TYPES ---------------- */
 
-type Sprint = Prisma.SprintGetPayload<{}>;
+type Sprint = Prisma.SprintGetPayload<Record<string, never>>;
 
 type SprintBoardProps = {
   sprints: Sprint[];

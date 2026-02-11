@@ -32,14 +32,13 @@ export async function createSprint(
       organizationId: orgId,
     });
 
-  // const isAdmin = memberships.some(
-  //   (m) =>
-  //     m.publicUserData?.userId === userId && m.role === "org:admin"
-  // );
+  const isAdmin = memberships.some(
+    (m) => m.publicUserData?.userId === userId && m.role === "org:admin"
+  );
 
-  // if (!isAdmin) {
-  //   throw new Error("Only admins can create sprints");
-  // }
+  if (!isAdmin) {
+    throw new Error("Only admins can create sprints");
+  }
 
   const project = await db.project.findUnique({
     where: { id: projectId },
@@ -69,8 +68,7 @@ export async function updateSprintStatus(
   sprintId: string,
   newStatus: SprintStatus
 ) {
-  const { userId, orgId,orgRole } = await auth();
-  const clerk = await clerkClient();
+  const { userId, orgId, orgRole } = await auth();
 
   if (!userId || !orgId) {
     throw new Error("Unauthorized");

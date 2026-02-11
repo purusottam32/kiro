@@ -48,9 +48,11 @@ export async function createProject(data: {
         description: data.description ?? "",
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Create project error:", error);
-    throw new Error(error.message || "Failed to create project");
+    const message =
+      error instanceof Error ? error.message : "Failed to create project";
+    throw new Error(message);
   }
 }
 

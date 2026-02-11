@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-const useFetch = <T, A extends any[] = any[]>(
+const useFetch = <T, A extends unknown[] = unknown[]>(
   cb: (...args: A) => Promise<T>,
   initialData?: T
 ) => {

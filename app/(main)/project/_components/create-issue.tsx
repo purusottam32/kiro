@@ -43,7 +43,7 @@ type IssueCreationDrawerProps = {
   orgId: string;
 };
 
-type OrgUser = Prisma.UserGetPayload<{}>;
+type OrgUser = Prisma.UserGetPayload<Record<string, never>>;
 type IssueFormData = z.infer<typeof issueSchema>;
 
 /* ---------------- COMPONENT ---------------- */

@@ -16,7 +16,7 @@ export type IssueWithRelations = Prisma.IssueGetPayload<{
   };
 }>;
 
-export type UserBasic = Prisma.UserGetPayload<{}>;
+export type UserBasic = Prisma.UserGetPayload<Record<string, never>>;
 export type UserMinimal = Prisma.UserGetPayload<{
   select: {
     id: true;
@@ -34,7 +34,7 @@ export type IssueFull = Prisma.IssueGetPayload<{
 }>;
 
 
-export type Project = Prisma.ProjectGetPayload<{}>;
+export type Project = Prisma.ProjectGetPayload<Record<string, never>>;
 
 export type ProjectWithRelations = Prisma.ProjectGetPayload<{
   include: {

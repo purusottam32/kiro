@@ -92,7 +92,7 @@ export default function Home() {
           </p>
 
           {/* Stats Section */}
-          <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-10 animate-slide-in" style={{ animationDelay: '0.3s' }}>
+          {/* <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-8 max-w-3xl mx-auto mb-10 animate-slide-in" style={{ animationDelay: '0.3s' }}>
             <div className="text-center p-4 rounded-lg bg-gradient-to-br from-slate-800/30 to-slate-900/30 border border-slate-700/30 hover:border-blue-500/30 transition-all">
               <div className="text-3xl sm:text-4xl font-bold text-blue-400">500+</div>
               <div className="text-xs sm:text-sm text-slate-400 mt-2">Active Teams</div>
@@ -105,13 +105,13 @@ export default function Home() {
               <div className="text-3xl sm:text-4xl font-bold text-blue-400">99.9%</div>
               <div className="text-xs sm:text-sm text-slate-400 mt-2">Uptime</div>
             </div>
-          </div>
+          </div> */}
 
           {/* CTA Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center animate-slide-in" style={{ animationDelay: '0.4s' }}>
             <Link href="/onboarding">
               <Button size="lg" className="w-full sm:w-auto px-10 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5">
-                Get Started Free
+                Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -139,14 +139,14 @@ export default function Home() {
       </section>
 
       {/* TRUSTED BY COMPANIES */}
-      <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-950 to-slate-900/70 border-t border-white/5">
+      {/* <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-950 to-slate-900/70 border-t border-white/5">
         <div className="container mx-auto">
           <h3 className="text-center text-sm sm:text-base font-semibold text-slate-400 mb-8">
             TRUSTED BY LEADING TEAMS
           </h3>
           <CompanyCarousel />
         </div>
-      </section>
+      </section> */}
 
       {/* FEATURES */}
       <section
@@ -189,7 +189,7 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIALS / SOCIAL PROOF */}
-      <section className="py-24 sm:py-32 px-4 bg-gradient-to-b from-slate-900/50 to-slate-900">
+      {/* <section className="py-24 sm:py-32 px-4 bg-gradient-to-b from-slate-900/50 to-slate-900">
         <div className="container mx-auto">
           <div className="text-center mb-16 animate-slide-down">
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -247,7 +247,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ */}
       <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-900/50 to-slate-950">
@@ -308,33 +308,19 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-down" style={{ animationDelay: '0.2s' }}>
             <Link href="/onboarding">
               <Button size="lg" className="px-12 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 hover:-translate-y-0.5 hover:scale-105">
-                Start for Free
+                Get Started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
 
-            <Link href="/onboarding">
+            {/* <Link href="/onboarding">
               <Button size="lg" variant="outline" className="px-12 py-6 text-base font-semibold border-2 border-slate-600 hover:border-blue-500 hover:bg-slate-700/30 transition-all duration-300 hover:scale-105">
                 Schedule Demo
               </Button>
-            </Link>
+            </Link> */}
           </div>
 
-          {/* Trust indicators */}
-          <div className="mt-16 flex flex-wrap justify-center gap-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <div className="text-center hover:scale-105 transition-transform">
-              <div className="text-2xl font-bold text-blue-400">4.9/5</div>
-              <div className="text-sm text-slate-400">Customer Rating</div>
-            </div>
-            <div className="text-center hover:scale-105 transition-transform">
-              <div className="text-2xl font-bold text-blue-400">24/7</div>
-              <div className="text-sm text-slate-400">Support Available</div>
-            </div>
-            <div className="text-center hover:scale-105 transition-transform">
-              <div className="text-2xl font-bold text-blue-400">No CC</div>
-              <div className="text-sm text-slate-400">Required to Start</div>
-            </div>
-          </div>
+         
         </div>
       </section>
     </div>

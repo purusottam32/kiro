@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import UserAvatar from "./user-avatar";
-import { useRouter } from "next/navigation";
-import type { Prisma } from "@/lib/generated/prisma/client";
 import IssueDetailsDialog from "./issue-details-dialog";
 import type { IssueWithRelations } from "@/lib/types/prisma";
 
@@ -47,15 +45,12 @@ export default function IssueCard({
   onUpdate = () => {},
 }: IssueCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const router = useRouter();
 
   const onDeleteHandler = () => {
-    // router.refresh();
     onDelete?.();
   };
 
   const onUpdateHandler = (updated: IssueWithRelations) => {
-    // router.refresh();
     onUpdate?.(updated);
   };
 

@@ -11,11 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { IssueWithAssignee } from "@/lib/types/prisma";
 
 const priorities = ["LOW", "MEDIUM", "HIGH", "URGENT"] as const;
 
 type BoardFiltersProps = {
-  issues: any[];
+  issues: IssueWithAssignee[];
   filters: {
     search: string;
     assignees: string[];

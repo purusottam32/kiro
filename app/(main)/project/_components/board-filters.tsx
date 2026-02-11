@@ -34,7 +34,7 @@ export default function BoardFilters({
     new Map(
       issues
         .filter((i) => i.assignee)
-        .map((i) => [i.assignee.id, i.assignee])
+        .map((i) => [i.assignee?.id, i.assignee])
     ).values()
   );
 

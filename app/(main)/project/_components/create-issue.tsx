@@ -68,26 +68,26 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
     loading: usersLoading,
     fn: fetchUsers,
     data: users,
-  } = useFetch<OrgUser[], [string]>(getOrganizationUsers);
+  } = useFetch<OrgUser[], [string]>((orgId: string) => getOrganizationUsers(orgId));
 
-const fetchedRef = useRef(false);
-
-
-useEffect(() => {
-  if (!isOpen || !orgId) return;
-  if (fetchedRef.current) return;
-
-  fetchedRef.current = true;
-  fetchUsers(orgId);
-
-}, [isOpen, orgId, fetchUsers]);
+  const fetchedRef = useRef(false);
 
 
-useEffect(() => {
-  if (!isOpen) {
-    fetchedRef.current = false;
-  }
-}, [isOpen]);
+  useEffect(() => {
+    if (!isOpen || !orgId) return;
+    if (fetchedRef.current) return;
+
+    fetchedRef.current = true;
+    fetchUsers(orgId);
+
+  }, [isOpen, orgId, fetchUsers]);
+
+
+  useEffect(() => {
+    if (!isOpen) {
+      fetchedRef.current = false;
+    }
+  }, [isOpen]);
 
 
   const {
@@ -134,18 +134,18 @@ useEffect(() => {
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Create New Issue</DrawerTitle>
-           <DrawerDescription>
-              Fill the details to create a new issue.
-            </DrawerDescription>
+          <DrawerDescription>
+            Fill the details to create a new issue.
+          </DrawerDescription>
         </DrawerHeader>
 
         {usersLoading && <BarLoader width="100%" />}
 
         <form onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmit(onSubmit)(e);
-              }} 
-              className="p-4 space-y-4">
+          e.preventDefault();
+          handleSubmit(onSubmit)(e);
+        }}
+          className="p-4 space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Title</label>
             <Input {...register("title")} />

@@ -50,7 +50,9 @@ export default function CreateProjectPage() {
     error,
     data: project,
     fn: createProjectFn,
-  } = useFetch<Project>(createProject);
+  } = useFetch<Project, [{ name: string; key: string; description?: string }]>(
+    (data) => createProject(data)
+  );
 
   /* ---------------- EFFECTS ---------------- */
 

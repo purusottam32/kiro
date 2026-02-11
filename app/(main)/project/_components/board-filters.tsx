@@ -78,7 +78,7 @@ export default function BoardFilters({
                     : [...filters.assignees, assignee.id],
                 })
               }
-              title={assignee.name}
+              title={assignee.name || undefined}
             >
               <Avatar className="h-8 w-8">
                 <AvatarImage src={assignee.imageUrl || undefined} alt={assignee.name || "User"} />

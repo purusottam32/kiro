@@ -59,6 +59,7 @@ export default function BoardFilters({
         }
       />
 
+
       <div className="flex gap-2 items-center">
         <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Assignees:</span>
         {assignees.map((assignee) => {
@@ -86,6 +87,21 @@ export default function BoardFilters({
             </div>
           );
         })}
+      </div>
+
+      <Select
+        value={filters.priority}
+        onValueChange={(value) =>
+          onChange({ ...filters, priority: value })
+        }
+      >
+        <SelectTrigger className="w-48 bg-slate-800/50 border-slate-700 focus:border-blue-500 focus:ring-blue-500/20">
+          <SelectValue placeholder="Priority" />
+        </SelectTrigger>
+        <SelectContent>
+          {priorities.map((p) => (
+            <SelectItem key={p} value={p}>
+              {p}
             </SelectItem>
           ))}
         </SelectContent>

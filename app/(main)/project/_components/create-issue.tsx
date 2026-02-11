@@ -68,7 +68,7 @@ const IssueCreationDrawer: React.FC<IssueCreationDrawerProps> = ({
     loading: usersLoading,
     fn: fetchUsers,
     data: users,
-  } = useFetch<OrgUser[]>(getOrganizationUsers);
+  } = useFetch<OrgUser[], [string]>(getOrganizationUsers);
 
 const fetchedRef = useRef(false);
 

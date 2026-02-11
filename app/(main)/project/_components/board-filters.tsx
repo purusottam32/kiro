@@ -63,7 +63,6 @@ export default function BoardFilters({
         <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Assignees:</span>
         {assignees.map((assignee) => {
           const selected = filters.assignees.includes(assignee.id);
-
           return (
             <div
               key={assignee.id}
@@ -77,31 +76,16 @@ export default function BoardFilters({
                     ? filters.assignees.filter((id) => id !== assignee.id)
                     : [...filters.assignees, assignee.id],
                 })
-          {assignees.map((assignee) => {
-            const selected = filters.assignees.includes(assignee.id);
-            return (
-              <div
-                key={assignee.id}
-                className={`rounded-full ring-2 cursor-pointer transition-all duration-200 ${
-                  selected ? "ring-blue-500 shadow-lg shadow-blue-500/30" : "ring-slate-700 hover:ring-blue-400"
-                }`}
-                onClick={() =>
-                  onChange({
-                    ...filters,
-                    assignees: selected
-                      ? filters.assignees.filter((id) => id !== assignee.id)
-                      : [...filters.assignees, assignee.id],
-                  })
-                }
-                title={assignee.name}
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={assignee.imageUrl || undefined} alt={assignee.name || "User"} />
-                  <AvatarFallback>{assignee.name?.[0] || "U"}</AvatarFallback>
-                </Avatar>
-              </div>
-            );
-          })}
+              }
+              title={assignee.name}
+            >
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={assignee.imageUrl || undefined} alt={assignee.name || "User"} />
+                <AvatarFallback>{assignee.name?.[0] || "U"}</AvatarFallback>
+              </Avatar>
+            </div>
+          );
+        })}
             </SelectItem>
           ))}
         </SelectContent>

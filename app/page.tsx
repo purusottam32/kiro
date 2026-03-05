@@ -63,7 +63,7 @@ export default async function HomePage() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="w-full sm:w-auto h-12 px-8">
-                <Link href="https://github.com" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/purusottam32/kiro" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-4 w-4" /> Star on GitHub
                 </Link>
               </Button>
@@ -140,7 +140,7 @@ export default async function HomePage() {
           <div className="flex gap-6">
             <Link href="#" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link href="#" className="hover:text-foreground transition-colors">Terms</Link>
-            <Link href="https://github.com" className="hover:text-foreground transition-colors">GitHub</Link>
+            <Link href="https://github.com/purusottam32/kiro" className="hover:text-foreground transition-colors">GitHub</Link>
           </div>
         </div>
       </footer>
